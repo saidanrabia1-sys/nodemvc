@@ -8,10 +8,10 @@ const express = require("express");
 const router = express.Router();
 
 // Maintenant, je trace ma route en utilisant route
-const accueilContreller = require("../controllers/accueilController");
+const accueilController = require("../controllers/accueilController");
 
 // La route pour l'accueil, localhost:3007
-router.get("/", accueilContreller.accueilViews);
+router.get("/", accueilController.accueilViews);
 
 module.exports = router;
 

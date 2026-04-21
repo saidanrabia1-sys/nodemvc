@@ -12,5 +12,7 @@ const router = express.Router();
 router.get("/register", authController.registerView);
 
 
+router.post("/register", authController.registerUser);
+
 // J'exporte le "router" pour le rendre accesible depuis d'autres fichiers de l'application
 module.exports = router;

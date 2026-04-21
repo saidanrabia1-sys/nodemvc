@@ -19,6 +19,9 @@
   },
   "dependencies": {
     "ejs": "^5.0.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-myconnection": "^1.0.4",
+    "mysql2": "^3.22.1",
+    "sequelize": "^6.37.8"
   }
 }

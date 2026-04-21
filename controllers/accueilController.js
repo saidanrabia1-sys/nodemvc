@@ -6,5 +6,7 @@ module.exports = {
     accueilViews: (req, res) => {
         res.render('accueil');
     }
+    
 
 }
+
