@@ -10,6 +10,10 @@ const mysql2 = require("mysql2");
 const myconnection = require('express-myconnection');
 
 
+// Ces 2 lignes OBLIGATOIRES et AVANT les routes
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //J'importe la route accueilRoute.js
 const accueilRoute = require("./routes/accueilRoute");
 

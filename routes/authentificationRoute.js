@@ -1,18 +1,24 @@
 /**
- * Le fichier authentificationRoute.js a pour mission de tracer les routes pour : 
- * enregistrer oiu créer un utilisateur
- * se connecter à son compte utilisateur 
+ * Le fichier authentificationRoute.js a pour mission de tracer les routes pour :
+ * - enregistrer ou créer un utilisateur
+ * - se connecter à son compte utilisateur
  */
 const express = require("express");
-
-const authController = require("../controllers/authentificationController");
-
 const router = express.Router();
 
+// J'importe le controller
+const authController = require("../controllers/authentificationController");
+
+// Affiche le formulaire d'inscription
 router.get("/register", authController.registerView);
 
+/* Traite le formulaire d'inscription
+router.post("/register", authController.registerUser);*/
 
-router.post("/register", authController.registerUser);
+// Recherche un utilisateur par son ID
+router.get("/users/:id", authController.findOne);
 
-// J'exporte le "router" pour le rendre accesible depuis d'autres fichiers de l'application
+router.get("/users", userController.findAll);
+
+// J'exporte le router
 module.exports = router;
