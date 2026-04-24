@@ -1,5 +1,8 @@
 // Le fichier authentificationController.js gère l'authentification des utilisateurs
 
+// J'importe la connexion Sequelize
+const db = require("../models");
+
 module.exports = {
 
     // Affiche la page d'inscription
@@ -26,65 +29,63 @@ module.exports = {
             });
         }
 
-        // Je prépare la requête SQL d'insertion
-        let requeteSql = "INSERT INTO user(id, email, password) VALUES(?, ?, ?)";
+        try {
+            // J'insère l'utilisateur dans la base de données via Sequelize
+            await db.sequelize.query(
+                "INSERT INTO users(email, password) VALUES(?, ?)",
+                {
+                    replacements: [emailUser, passwordUser],
+                    type: db.Sequelize.QueryTypes.INSERT
+                }
+            );
 
-        // Je prépare les valeurs à insérer (null = ID auto-incrémenté)
-        let ordreDonnees = [null, emailUser, passwordUser];
+            console.log("Utilisateur créé avec succès !");
 
-        // Je me connecte à la base de données via le middleware
-        req.getConnection((erreur, connection) => {
+            // Je redirige vers l'accueil après l'inscription
+            res.redirect("/");
 
-            // Si erreur de connexion à la BDD
-            if (erreur) {
-                console.log("Erreur connexion à la BDD :", erreur);
-            } else {
-
-                // J'exécute la requête SQL avec les données du formulaire
-                connection.query(requeteSql, ordreDonnees, (erreur, nouvelUtilisateur) => {
-
-                    // Si erreur lors de la requête SQL
-                    if (erreur) {
-                        console.log("Erreur de requête :", erreur);
-                    } else {
-                        console.log("Utilisateur créé avec succès !");
-
-                        // Je redirige vers l'accueil après l'inscription
-                        res.redirect("/");
-                    }
-                });
-            }
-        });
+        } catch (erreur) {
+            console.log("Erreur :", erreur.message);
+            res.render('register', {
+                error: "Erreur lors de l'enregistrement."
+            });
+        }
     },
 
+ // Affiche tous les utilisateurs en JSON
+findAll: async (req, res) => {
+    try {
+        const utilisateurs = await db.sequelize.query(
+            "SELECT * FROM users",
+            { type: db.Sequelize.QueryTypes.SELECT }
+        );
+
+        // Affiche les données directement dans le navigateur
+        res.json(utilisateurs);
+
+    } catch (erreur) {
+        console.log("Erreur :", erreur.message);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+},
     // Recherche un utilisateur par son ID
-    findOne: (req, res) => {
+    findOne: async (req, res) => {
+        try {
+            // Je recherche l'utilisateur par son ID
+            const resultats = await db.sequelize.query(
+                "SELECT * FROM users WHERE id = ?",
+                {
+                    replacements: [req.params.id],
+                    type: db.Sequelize.QueryTypes.SELECT
+                }
+            );
 
-        // Je prépare la requête SQL de recherche
-        let requeteSql = "SELECT * FROM user WHERE id = ?";
+            // Je retourne les résultats en JSON
+            res.json(resultats);
 
-        // Je me connecte à la base de données
-        req.getConnection((erreur, connection) => {
-
-            // Si erreur de connexion
-            if (erreur) {
-                console.log("Erreur connexion à la BDD :", erreur);
-                res.status(500).json({ error: "Erreur de connexion" });
-            } else {
-
-                // J'exécute la requête avec l'ID passé en paramètre d'URL
-                connection.query(requeteSql, [req.params.id], (erreur, resultats) => {
-
-                    // Si erreur lors de la requête
-                    if (erreur) {
-                        console.log("Erreur de requête :", erreur);
-                        res.status(500).json({ error: "Erreur de requête" });
-                    } else {
-                        // Je retourne les résultats en JSON
-                        res.json(resultats);
-                    }
-                });
-            }
-        });
+        } catch (erreur) {
+            console.log("Erreur :", erreur.message);
+            res.status(500).json({ error: "Erreur de requête" });
+        }
     }
 };

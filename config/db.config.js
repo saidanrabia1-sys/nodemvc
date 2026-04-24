@@ -6,7 +6,7 @@ module.exports = {
     USER: "root",
 
     // Mot de passe MySQL
-    PASSWORD: "pd+12sQm",
+    PASSWORD: "Alma12.2025",
 
     // Nom de la base de données
     BD: "maygourmet",

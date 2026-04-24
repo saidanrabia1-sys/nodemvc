@@ -8,7 +8,6 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
     dbConfig.BD, dbConfig.USER, dbConfig.PASSWORD, {
         host: dbConfig.HOST,
-        operatorsAliases: false, // Désactive les alias d'opérateurs (sécurité)
         dialect: "mysql",
 
         // Je configure le pool de connexions
@@ -29,7 +28,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // J'importe le modèle User et je l'associe à la connexion
-db.user = require("./User")(sequelize, Sequelize); // ⚠️ 2ème argument doit être Sequelize et non sequelize
+db.user = require("./User")(sequelize, Sequelize); //  2ème argument doit être Sequelize et non sequelize
 
 // J'exporte l'objet db pour l'utiliser dans d'autres fichiers
 module.exports = db;

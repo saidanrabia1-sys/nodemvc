@@ -4,8 +4,10 @@
 const Sequelize = require ("sequelize");
 
 const sequelize = new Sequelize(
-    'maygourmet', 'root', 'pd+12SQm', {
+    'maygourmet', 'root', 'Alma12.2025', {
         host: "localhost",
         dialect: "mysql"
     }
 );
+
+module.exports = sequelize;
